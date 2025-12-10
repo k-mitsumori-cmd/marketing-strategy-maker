@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -257,6 +258,81 @@
                 </div>
             </div>
 
+            <!-- サマリーダッシュボード -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="dashboard-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="dashboard-content">
+                        <h4>目標</h4>
+                        <p id="summary-goal">-</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                        <i class="fas fa-yen-sign"></i>
+                    </div>
+                    <div class="dashboard-content">
+                        <h4>月間予算</h4>
+                        <p id="summary-budget">-</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="dashboard-content">
+                        <h4>期間</h4>
+                        <p id="summary-period">-</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon" style="background: linear-gradient(135deg, #ef4444, #f87171);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="dashboard-content">
+                        <h4>想定ROI</h4>
+                        <p id="summary-roi">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- グラフセクション -->
+            <div class="charts-section">
+                <h3 class="section-title"><i class="fas fa-chart-bar"></i> データ可視化ダッシュボード</h3>
+                <div class="charts-grid">
+                    <!-- 予算配分円グラフ -->
+                    <div class="chart-card">
+                        <h4><i class="fas fa-chart-pie"></i> 予算配分</h4>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- KPI推移線グラフ -->
+                    <div class="chart-card">
+                        <h4><i class="fas fa-chart-line"></i> KPI推移予測</h4>
+                        <div class="chart-container">
+                            <canvas id="kpiChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- チャネル別効果棒グラフ -->
+                    <div class="chart-card">
+                        <h4><i class="fas fa-chart-bar"></i> チャネル別期待効果</h4>
+                        <div class="chart-container">
+                            <canvas id="channelChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- ROI予測グラフ -->
+                    <div class="chart-card">
+                        <h4><i class="fas fa-money-bill-trend-up"></i> 月別ROI予測</h4>
+                        <div class="chart-container">
+                            <canvas id="roiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 戦略概要 -->
             <div class="result-card card" id="overview-card">
                 <div class="card-header">
@@ -264,7 +340,6 @@
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="overview-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
@@ -275,73 +350,86 @@
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="kpi-content">
-                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- 予算配分詳細 -->
+            <div class="result-card card" id="budget-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-coins"></i> 3. 推奨予算配分</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="budget-content">
+                </div>
+            </div>
+
+            <!-- 広告戦略 -->
+            <div class="result-card card" id="ads-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-ad"></i> 4. 広告出稿戦略</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="ads-content">
                 </div>
             </div>
 
             <!-- 成長戦略 -->
             <div class="result-card card" id="growth-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-seedling"></i> 3. 成長戦略（AARRR）</h3>
+                    <h3><i class="fas fa-seedling"></i> 5. 成長戦略（AARRR）</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="growth-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
             <!-- 施策一覧 -->
             <div class="result-card card" id="tactics-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-list-check"></i> 4. 施策一覧</h3>
+                    <h3><i class="fas fa-list-check"></i> 6. 施策一覧</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="tactics-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
             <!-- 詳細タスク -->
             <div class="result-card card" id="tasks-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-clipboard-list"></i> 5. 詳細タスク</h3>
+                    <h3><i class="fas fa-clipboard-list"></i> 7. 詳細タスク（週次）</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="tasks-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
             <!-- 優先順位 -->
             <div class="result-card card" id="priority-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-sort-amount-down"></i> 6. 施策の優先順位</h3>
+                    <h3><i class="fas fa-sort-amount-down"></i> 8. 施策の優先順位</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="priority-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
             <!-- ロードマップ -->
             <div class="result-card card" id="roadmap-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-calendar-check"></i> 7. 月次ロードマップ</h3>
+                    <h3><i class="fas fa-calendar-check"></i> 9. 月次ロードマップ</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="roadmap-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
             <!-- KPI予測 -->
             <div class="result-card card" id="forecast-card">
                 <div class="card-header">
-                    <h3><i class="fas fa-chart-line"></i> 8. 想定KPI推移予測</h3>
+                    <h3><i class="fas fa-chart-line"></i> 10. 想定KPI推移予測</h3>
                     <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
                 </div>
                 <div class="card-body" id="forecast-content">
-                    <!-- AIが生成したコンテンツが入る -->
                 </div>
             </div>
 
