@@ -74,9 +74,6 @@ function initializeApp() {
     document.getElementById('regenerate-btn')?.addEventListener('click', handleRegenerate);
     document.getElementById('edit-btn')?.addEventListener('click', handleEdit);
     
-    document.getElementById('export-markdown-btn')?.addEventListener('click', exportMarkdown);
-    document.getElementById('copy-btn')?.addEventListener('click', copyToClipboard);
-    
     setupCardToggles();
 }
 
@@ -633,84 +630,6 @@ function setupCardToggles() {
             icon.classList.toggle('fa-chevron-down');
         });
     });
-}
-
-function exportMarkdown() {
-    if (!generatedStrategy || !currentFormData) {
-        showToast('エクスポートするデータがありません', 'error');
-        return;
-    }
-    
-    const markdown = generateMarkdown();
-    const blob = new Blob([markdown], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `marketing-strategy-${formatDate(new Date())}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showToast('Markdownファイルをダウンロードしました');
-    updateStepIndicator(4);
-}
-
-function generateMarkdown() {
-    const formData = currentFormData;
-    const strategy = generatedStrategy;
-    
-    const htmlToMarkdown = (html) => {
-        if (!html) return '';
-        return html
-            .replace(/<h4>(.*?)<\/h4>/g, '\n### $1\n')
-            .replace(/<strong>(.*?)<\/strong>/g, '**$1**')
-            .replace(/<ul>/g, '\n').replace(/<\/ul>/g, '\n')
-            .replace(/<li>/g, '- ').replace(/<\/li>/g, '\n')
-            .replace(/<p>(.*?)<\/p>/g, '\n$1\n')
-            .replace(/<[^>]*>/g, '')
-            .replace(/\n{3,}/g, '\n\n')
-            .trim();
-    };
-    
-    return `# マーケティング戦略レポート
-
-**生成日**: ${new Date().toLocaleDateString('ja-JP')}
-
-## 基本情報
-- **目標**: ${formData.goalLabel}（${formData.goalValue}）
-- **予算**: ${formData.budget}
-- **期間**: ${formData.period}
-
-## 戦略概要
-${htmlToMarkdown(strategy.overview)}
-
-## KPI/KGI
-${htmlToMarkdown(strategy.kpi)}
-
-## 予算配分
-${htmlToMarkdown(strategy.budgetDetail)}
-
-## 広告戦略
-${htmlToMarkdown(strategy.adsStrategy)}
-
----
-*Marketing Strategy Makerにより自動生成*
-`;
-}
-
-async function copyToClipboard() {
-    if (!generatedStrategy || !currentFormData) {
-        showToast('コピーするデータがありません', 'error');
-        return;
-    }
-    try {
-        await navigator.clipboard.writeText(generateMarkdown());
-        showToast('クリップボードにコピーしました');
-        updateStepIndicator(4);
-    } catch (error) {
-        showToast('コピーに失敗しました', 'error');
-    }
 }
 
 function formatDate(date) {
