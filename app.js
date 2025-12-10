@@ -75,7 +75,6 @@ function initializeApp() {
     document.getElementById('edit-btn')?.addEventListener('click', handleEdit);
     
     document.getElementById('export-markdown-btn')?.addEventListener('click', exportMarkdown);
-    document.getElementById('export-pdf-btn')?.addEventListener('click', exportPDF);
     document.getElementById('copy-btn')?.addEventListener('click', copyToClipboard);
     
     setupCardToggles();
@@ -698,23 +697,6 @@ ${htmlToMarkdown(strategy.adsStrategy)}
 ---
 *Marketing Strategy Makerにより自動生成*
 `;
-}
-
-async function exportPDF() {
-    showToast('PDFを生成中...', 'info');
-    try {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        pdf.setFontSize(20);
-        pdf.text('Marketing Strategy Report', 105, 20, { align: 'center' });
-        pdf.setFontSize(12);
-        pdf.text('For Japanese content, please use Markdown export.', 105, 40, { align: 'center' });
-        pdf.save(`marketing-strategy-${formatDate(new Date())}.pdf`);
-        showToast('PDFをダウンロードしました');
-        updateStepIndicator(4);
-    } catch (error) {
-        showToast('PDF生成に失敗しました', 'error');
-    }
 }
 
 async function copyToClipboard() {
