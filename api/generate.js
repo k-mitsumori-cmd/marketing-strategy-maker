@@ -71,127 +71,84 @@ module.exports = async function handler(req, res) {
         const businessTypeLabel = businessType === 'B2B' ? '法人向け（B2B）' :
                                   businessType === 'B2C' ? '個人向け（B2C）' : '法人・個人向け（B2B2C）';
 
-        // システムプロンプト
-        const systemPrompt = `あなたは、10年以上の経験を持つシニアマーケティングストラテジストです。
-デジタルマーケティング、グロースハック、セールスファネル設計に精通しています。
-クライアントのビジネス情報を分析し、実行可能で効果的なマーケティング戦略を立案します。
+        // プロンプト
+        const prompt = `あなたは10年以上の経験を持つシニアマーケティングストラテジストです。
+以下のビジネス情報に基づいて、包括的なマーケティング戦略を立案してください。
 
-回答は必ず以下のJSON形式で返してください（各セクションはHTML形式）：
+【ビジネスタイプ】${businessTypeLabel}
+【事業内容】${business}
+【商品/サービス】${product}
+【目標】${goalLabel}: ${goalValue}
+【予算】${budget}/月
+【期間】${period}
+【ターゲット】${persona}
+${competitors ? `【競合】${competitors}` : ''}
+${currentChannels ? `【現在のチャネル】${currentChannels}` : ''}
+${challenges ? `【課題】${challenges}` : ''}
+
+以下のJSON形式で回答してください。各セクションはHTML形式で記述してください：
+
 {
-  "overview": "<h4>...</h4><p>...</p>",
-  "kpi": "<h4>...</h4><table>...</table>",
-  "growth": "<h4>...</h4><ul>...</ul>",
-  "tactics": "<h4>...</h4><table>...</table>",
-  "tasks": "<h4>...</h4><ul>...</ul>",
-  "priority": "<h4>...</h4><table>...</table>",
-  "roadmap": "<h4>...</h4><table>...</table>",
-  "forecast": "<h4>...</h4><table>...</table>"
+  "overview": "戦略の全体像（h4タグで見出し、pタグで段落、ulタグでリスト）",
+  "kpi": "KPI/KGI整理（tableタグで表形式）",
+  "growth": "成長戦略AARRR（h4タグで各段階、ulタグでリスト）",
+  "tactics": "施策一覧（tableタグで表形式）",
+  "tasks": "詳細タスク（h4タグでフェーズ別、ulタグでリスト）",
+  "priority": "優先順位（tableタグでImpact/Effortマトリクス）",
+  "roadmap": "月次ロードマップ（tableタグで表形式）",
+  "forecast": "KPI推移予測（tableタグで表形式）"
 }
 
-HTML出力のルール：
-- セクション見出しは<h4>タグを使用
-- 段落は<p>タグ、リストは<ul><li>タグ、強調は<strong>タグを使用
-- 表は<table><tr><th><td>タグを使用
-- 優先度の高い項目には<span class="priority-high">最優先</span>、中は<span class="priority-medium">重要</span>、低は<span class="priority-low">推奨</span>を使用`;
+HTMLタグのルール：
+- 見出しは<h4>タグ
+- 段落は<p>タグ
+- リストは<ul><li>タグ
+- 強調は<strong>タグ
+- 表は<table><tr><th><td>タグ
+- 優先度高は<span class="priority-high">最優先</span>
+- 優先度中は<span class="priority-medium">重要</span>
+- 優先度低は<span class="priority-low">推奨</span>
 
-        // ユーザープロンプト
-        const userPrompt = `以下のビジネス情報に基づいて、包括的なマーケティング戦略を立案してください。
-
-【ビジネスタイプ】
-${businessTypeLabel}
-
-【事業内容】
-${business}
-
-【商品/サービスの説明】
-${product}
-
-【目標】
-${goalLabel}: ${goalValue}
-
-【予算】
-${budget}/月
-
-【期間】
-${period}
-
-【ターゲット情報（ペルソナ）】
-${persona}
-
-${competitors ? `【競合情報】\n${competitors}\n` : ''}
-${currentChannels ? `【現在の集客チャネル】\n${currentChannels}\n` : ''}
-${challenges ? `【現状の課題】\n${challenges}\n` : ''}
-
-以下の8つのセクションを含む戦略レポートを作成してください：
-
-1. **マーケティング戦略の全体像**（${businessTypeLabel}に最適化）
-   - 戦略コンセプト、基本方針、ターゲット戦略
-
-2. **目的・KPI・KGI整理**
-   - KGI（重要目標達成指標）の設定
-   - KPI（重要業績評価指標）の設定と目標値
-   - ファネル各段階の指標
-
-3. **成長戦略（AARRR）**
-   - Acquisition（獲得）
-   - Activation（活性化）
-   - Retention（継続）
-   - Revenue（収益）
-   - Referral（紹介）
-
-4. **施策一覧**
-   - 広告施策（種類、目的、予算配分）
-   - SEO/コンテンツ施策
-   - SNS施策
-   - セールス連携施策
-
-5. **詳細タスク**
-   - 初月のタスク
-   - 2-3ヶ月目のタスク
-   - 4ヶ月目以降のタスク
-
-6. **施策の優先順位**
-   - Impact/Effortマトリクス
-   - 推奨実行順序
-
-7. **月次ロードマップ**
-   - ${period}分の月別計画
-   - フェーズ、主要タスク、マイルストーン
-
-8. **想定KPI推移予測**
-   - 月別のKPI予測
-   - 想定ROI
-
-必ずJSON形式で返答してください。`;
+必ず有効なJSONで返答してください。`;
 
         // OpenAI API呼び出し
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY
         });
 
+        console.log('Calling OpenAI API...');
+
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4',
+            model: 'gpt-4o-mini',
             messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt }
+                { role: 'user', content: prompt }
             ],
             temperature: 0.7,
-            max_tokens: 4000,
-            response_format: { type: "json_object" }
+            max_tokens: 4000
         });
 
+        console.log('OpenAI API response received');
+
         const responseContent = completion.choices[0].message.content;
+        
+        // JSONを抽出（マークダウンコードブロックがある場合に対応）
+        let jsonStr = responseContent;
+        const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (jsonMatch) {
+            jsonStr = jsonMatch[1].trim();
+        }
         
         // JSONパース
         let strategy;
         try {
-            strategy = JSON.parse(responseContent);
+            strategy = JSON.parse(jsonStr);
         } catch (parseError) {
             console.error('JSON parse error:', parseError);
+            console.error('Response content:', responseContent);
             // JSONパースに失敗した場合、テキストとして処理
             strategy = {
-                overview: `<p>${responseContent}</p>`,
-                kpi: '',
+                overview: `<h4>戦略概要</h4><p>${responseContent.substring(0, 500)}...</p>`,
+                kpi: '<p>パース エラーが発生しました</p>',
                 growth: '',
                 tactics: '',
                 tasks: '',
@@ -206,6 +163,7 @@ ${challenges ? `【現状の課題】\n${challenges}\n` : ''}
 
     } catch (error) {
         console.error('戦略生成エラー:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         
         // エラーの種類に応じたレスポンス
         if (error.code === 'insufficient_quota') {
