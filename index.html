@@ -173,16 +173,42 @@
                     <span class="char-count"><span id="persona-count">0</span>/1000</span>
                 </div>
 
-                <!-- 追加情報（オプション） -->
-                <details class="optional-section">
-                    <summary><i class="fas fa-plus-circle"></i> 追加情報（オプション）</summary>
+                <!-- 競合分析（オプション） -->
+                <details class="optional-section competitor-section">
+                    <summary><i class="fas fa-search-dollar"></i> 競合分析（URLを入力すると詳細分析）</summary>
                     <div class="optional-content">
                         <div class="form-group">
-                            <label class="form-label" for="competitors">
-                                <i class="fas fa-users"></i> 競合情報
+                            <label class="form-label" for="competitorUrl1">
+                                <i class="fas fa-link"></i> 競合サイトURL 1
                             </label>
-                            <textarea id="competitors" name="competitors" rows="2" placeholder="主要な競合他社や差別化ポイント"></textarea>
+                            <input type="url" id="competitorUrl1" name="competitorUrl1" placeholder="https://example.com">
+                            <small class="input-hint">競合のWebサイトURLを入力すると、マーケティング施策を分析します</small>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label" for="competitorUrl2">
+                                <i class="fas fa-link"></i> 競合サイトURL 2
+                            </label>
+                            <input type="url" id="competitorUrl2" name="competitorUrl2" placeholder="https://example2.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="competitorUrl3">
+                                <i class="fas fa-link"></i> 競合サイトURL 3
+                            </label>
+                            <input type="url" id="competitorUrl3" name="competitorUrl3" placeholder="https://example3.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="competitors">
+                                <i class="fas fa-users"></i> 競合に関する補足情報
+                            </label>
+                            <textarea id="competitors" name="competitors" rows="2" placeholder="競合の強み、弱み、特徴など知っている情報"></textarea>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- その他の追加情報（オプション） -->
+                <details class="optional-section">
+                    <summary><i class="fas fa-plus-circle"></i> その他の追加情報（オプション）</summary>
+                    <div class="optional-content">
                         <div class="form-group">
                             <label class="form-label" for="currentChannels">
                                 <i class="fas fa-share-alt"></i> 現在の集客チャネル
@@ -292,6 +318,46 @@
                     <div class="dashboard-content">
                         <h4>想定ROI</h4>
                         <p id="summary-roi">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 競合分析セクション -->
+            <div id="competitor-analysis-section" class="competitor-analysis-section hidden">
+                <h3 class="section-title"><i class="fas fa-search-dollar"></i> 競合分析レポート</h3>
+                
+                <!-- 競合比較カード -->
+                <div class="competitor-cards" id="competitor-cards">
+                    <!-- 動的に生成 -->
+                </div>
+
+                <!-- 競合分析詳細 -->
+                <div class="result-card card" id="competitor-detail-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-balance-scale"></i> 競合マーケティング分析</h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div class="card-body" id="competitor-analysis-content">
+                    </div>
+                </div>
+
+                <!-- 差別化戦略 -->
+                <div class="result-card card" id="differentiation-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> 差別化戦略・提案</h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div class="card-body" id="differentiation-content">
+                    </div>
+                </div>
+
+                <!-- 競合に勝つための施策 -->
+                <div class="result-card card" id="winning-tactics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy"></i> 競合に勝つための具体的施策</h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div class="card-body" id="winning-tactics-content">
                     </div>
                 </div>
             </div>

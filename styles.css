@@ -1468,8 +1468,220 @@ select {
     color: var(--error);
 }
 
+/* ===== 競合分析セクション ===== */
+.competitor-section summary {
+    color: var(--primary);
+}
+
+.input-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+
+.competitor-analysis-section {
+    margin-bottom: 1.5rem;
+}
+
+.competitor-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.competitor-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.competitor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.competitor-card.your-company {
+    border-left-color: var(--success);
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.competitor-card h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+}
+
+.competitor-card h4 i {
+    color: var(--primary);
+}
+
+.competitor-card.your-company h4 i {
+    color: var(--success);
+}
+
+.competitor-card .url {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    word-break: break-all;
+    margin-bottom: 0.75rem;
+}
+
+.competitor-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.competitor-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--gray-200);
+}
+
+.competitor-stat:last-child {
+    border-bottom: none;
+}
+
+.competitor-stat-label {
+    color: var(--gray-600);
+}
+
+.competitor-stat-value {
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.competitor-stat-value.good {
+    color: var(--success);
+}
+
+.competitor-stat-value.bad {
+    color: var(--error);
+}
+
+/* SWOT分析 */
+.swot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.swot-card {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+}
+
+.swot-card h5 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    margin-bottom: 0.75rem;
+}
+
+.swot-strengths {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+}
+
+.swot-strengths h5 { color: #166534; }
+
+.swot-weaknesses {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border: 1px solid #fca5a5;
+}
+
+.swot-weaknesses h5 { color: #991b1b; }
+
+.swot-opportunities {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #93c5fd;
+}
+
+.swot-opportunities h5 { color: #1e40af; }
+
+.swot-threats {
+    background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%);
+    border: 1px solid #fde047;
+}
+
+.swot-threats h5 { color: #854d0e; }
+
+.swot-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.swot-card li {
+    margin-bottom: 0.375rem;
+}
+
+/* 差別化ポイント */
+.differentiation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.diff-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary);
+}
+
+.diff-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.diff-icon i {
+    color: white;
+    font-size: 1.25rem;
+}
+
+.diff-content h5 {
+    font-size: 0.9375rem;
+    color: var(--gray-800);
+    margin-bottom: 0.25rem;
+}
+
+.diff-content p {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0;
+}
+
 /* ===== レスポンシブ対応（追加） ===== */
 @media (max-width: 1024px) {
+    .competitor-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .swot-grid {
+        grid-template-columns: 1fr;
+    }
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
     }

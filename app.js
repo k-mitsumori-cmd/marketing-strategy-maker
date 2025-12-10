@@ -14,28 +14,34 @@ const SAMPLE_DATA_ARRAY = [
     {
         businessType: 'B2B',
         business: 'クラウド型会計ソフトの開発・販売を行うSaaSスタートアップ',
-        product: '中小企業向けに設計されたクラウド会計ソフト「MoneyFlow」。AIによる自動仕訳機能、リアルタイム銀行連携、カスタマイズ可能なレポート生成機能を搭載。月額9,800円からのサブスクリプションモデルで、導入後の経理業務を最大70%効率化。',
+        product: '中小企業向けに設計されたクラウド会計ソフト「MoneyFlow」。AIによる自動仕訳機能、リアルタイム銀行連携、カスタマイズ可能なレポート生成機能を搭載。月額9,800円からのサブスクリプションモデル。',
         goal: 'lead',
         goalValue: '月間100件の無料トライアル申込',
         budget: '100-300万円',
         period: '6ヶ月',
-        persona: '従業員10-50名の中小企業。主に経理担当者（30-50代女性）または経営者（40-60代男性）。現在はExcelや古い会計ソフトを使用しており、業務効率化に強い関心。ITリテラシーは中程度で、導入の手軽さを重視。',
+        persona: '従業員10-50名の中小企業。主に経理担当者（30-50代女性）または経営者（40-60代男性）。',
         competitors: '弥生会計、freee、マネーフォワード',
         currentChannels: 'Google広告、展示会出展',
-        challenges: 'CPAが高く、認知度が低い。無料トライアルからの有料転換率を改善したい。'
+        challenges: 'CPAが高く、認知度が低い。',
+        competitorUrl1: 'https://www.freee.co.jp/',
+        competitorUrl2: 'https://www.yayoi-kk.co.jp/',
+        competitorUrl3: 'https://moneyforward.com/'
     },
     {
         businessType: 'B2C',
         business: 'オンラインフィットネスプログラムの提供',
-        product: '自宅でできるパーソナライズされたフィットネスプログラム「FitHome」。AIが体型・目標・生活スタイルに合わせた最適なトレーニングメニューを自動生成。ライブレッスンとオンデマンド動画の両方を提供。月額2,980円から。',
+        product: '自宅でできるパーソナライズされたフィットネスプログラム「FitHome」。AIが最適なトレーニングメニューを自動生成。月額2,980円から。',
         goal: 'conversion',
         goalValue: '無料体験からの有料転換率30%',
         budget: '50-100万円',
         period: '3ヶ月',
-        persona: '20-40代の働く女性。運動不足を感じているが、ジムに通う時間がない。健康意識が高く、SNSでの情報収集が活発。スマートフォンの利用頻度が高い。',
+        persona: '20-40代の働く女性。運動不足を感じているが、ジムに通う時間がない。',
         competitors: 'LEAN BODY、SOELU',
         currentChannels: 'Instagram広告、インフルエンサーマーケティング',
-        challenges: '競合が多く差別化が難しい。継続率の向上が課題。'
+        challenges: '競合が多く差別化が難しい。',
+        competitorUrl1: 'https://lp.lean-body.jp/',
+        competitorUrl2: 'https://soelu.com/',
+        competitorUrl3: ''
     }
 ];
 
@@ -106,6 +112,9 @@ function fillSampleData() {
     document.getElementById('competitors').value = sample.competitors || '';
     document.getElementById('currentChannels').value = sample.currentChannels || '';
     document.getElementById('challenges').value = sample.challenges || '';
+    document.getElementById('competitorUrl1').value = sample.competitorUrl1 || '';
+    document.getElementById('competitorUrl2').value = sample.competitorUrl2 || '';
+    document.getElementById('competitorUrl3').value = sample.competitorUrl3 || '';
     
     updateCharCounts();
     showToast('サンプルデータを入力しました');
@@ -160,7 +169,10 @@ function collectFormData() {
         persona: document.getElementById('persona').value.trim(),
         competitors: document.getElementById('competitors').value.trim(),
         currentChannels: document.getElementById('currentChannels').value.trim(),
-        challenges: document.getElementById('challenges').value.trim()
+        challenges: document.getElementById('challenges').value.trim(),
+        competitorUrl1: document.getElementById('competitorUrl1')?.value.trim() || '',
+        competitorUrl2: document.getElementById('competitorUrl2')?.value.trim() || '',
+        competitorUrl3: document.getElementById('competitorUrl3')?.value.trim() || ''
     };
 }
 
@@ -278,8 +290,158 @@ function displayResults(strategy, formData) {
         document.getElementById('roadmap-content').innerHTML = strategy.roadmap || '';
         document.getElementById('forecast-content').innerHTML = strategy.forecast || '';
         
+        // 競合分析セクションの表示
+        const competitorSection = document.getElementById('competitor-analysis-section');
+        if (strategy.hasCompetitorAnalysis && strategy.competitorAnalysis) {
+            competitorSection.classList.remove('hidden');
+            renderCompetitorAnalysis(strategy, formData);
+        } else {
+            competitorSection.classList.add('hidden');
+        }
+        
         document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
     }, 500);
+}
+
+// 競合分析の表示
+function renderCompetitorAnalysis(strategy, formData) {
+    const competitorCards = document.getElementById('competitor-cards');
+    const analysis = strategy.competitorAnalysis;
+    
+    // 競合カードを生成
+    let cardsHtml = `
+        <div class="competitor-card your-company">
+            <h4><i class="fas fa-building"></i> あなたの会社</h4>
+            <div class="competitor-stats">
+                <div class="competitor-stat">
+                    <span class="competitor-stat-label">事業</span>
+                    <span class="competitor-stat-value">${formData.business.substring(0, 30)}...</span>
+                </div>
+                <div class="competitor-stat">
+                    <span class="competitor-stat-label">目標</span>
+                    <span class="competitor-stat-value">${formData.goalLabel}</span>
+                </div>
+                <div class="competitor-stat">
+                    <span class="competitor-stat-label">予算</span>
+                    <span class="competitor-stat-value">${formData.budget}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (analysis.competitors) {
+        analysis.competitors.forEach((comp, i) => {
+            cardsHtml += `
+                <div class="competitor-card">
+                    <h4><i class="fas fa-building"></i> ${comp.name || '競合' + (i + 1)}</h4>
+                    <p class="url">${comp.url}</p>
+                    <div class="competitor-stats">
+                        <div class="competitor-stat">
+                            <span class="competitor-stat-label">推定トラフィック</span>
+                            <span class="competitor-stat-value">${comp.estimatedTraffic || '-'}</span>
+                        </div>
+                        <div class="competitor-stat">
+                            <span class="competitor-stat-label">主要チャネル</span>
+                            <span class="competitor-stat-value">${comp.mainChannels || '-'}</span>
+                        </div>
+                        <div class="competitor-stat">
+                            <span class="competitor-stat-label">強み</span>
+                            <span class="competitor-stat-value">${comp.strength || '-'}</span>
+                        </div>
+                        <div class="competitor-stat">
+                            <span class="competitor-stat-label">弱み</span>
+                            <span class="competitor-stat-value">${comp.weakness || '-'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    competitorCards.innerHTML = cardsHtml;
+    
+    // SWOT分析を含む競合分析コンテンツ
+    let analysisHtml = analysis.analysis || '';
+    
+    if (analysis.swot) {
+        analysisHtml += `
+            <h4>SWOT分析</h4>
+            <div class="swot-grid">
+                <div class="swot-card swot-strengths">
+                    <h5><i class="fas fa-plus-circle"></i> 強み (Strengths)</h5>
+                    <ul>${(analysis.swot.strengths || []).map(s => `<li>${s}</li>`).join('')}</ul>
+                </div>
+                <div class="swot-card swot-weaknesses">
+                    <h5><i class="fas fa-minus-circle"></i> 弱み (Weaknesses)</h5>
+                    <ul>${(analysis.swot.weaknesses || []).map(s => `<li>${s}</li>`).join('')}</ul>
+                </div>
+                <div class="swot-card swot-opportunities">
+                    <h5><i class="fas fa-arrow-up"></i> 機会 (Opportunities)</h5>
+                    <ul>${(analysis.swot.opportunities || []).map(s => `<li>${s}</li>`).join('')}</ul>
+                </div>
+                <div class="swot-card swot-threats">
+                    <h5><i class="fas fa-exclamation-triangle"></i> 脅威 (Threats)</h5>
+                    <ul>${(analysis.swot.threats || []).map(s => `<li>${s}</li>`).join('')}</ul>
+                </div>
+            </div>
+        `;
+    }
+    
+    document.getElementById('competitor-analysis-content').innerHTML = analysisHtml;
+    document.getElementById('differentiation-content').innerHTML = strategy.differentiation || generateDifferentiationContent();
+    document.getElementById('winning-tactics-content').innerHTML = strategy.winningTactics || generateWinningTacticsContent();
+}
+
+function generateDifferentiationContent() {
+    return `
+        <h4>差別化戦略</h4>
+        <div class="differentiation-list">
+            <div class="diff-item">
+                <div class="diff-icon"><i class="fas fa-gem"></i></div>
+                <div class="diff-content">
+                    <h5>価格戦略での差別化</h5>
+                    <p>競合よりも明確な価値提案と適正価格設定で差別化を図ります。</p>
+                </div>
+            </div>
+            <div class="diff-item">
+                <div class="diff-icon"><i class="fas fa-headset"></i></div>
+                <div class="diff-content">
+                    <h5>カスタマーサポートの強化</h5>
+                    <p>迅速で丁寧なサポート体制を構築し、顧客満足度で差別化します。</p>
+                </div>
+            </div>
+            <div class="diff-item">
+                <div class="diff-icon"><i class="fas fa-rocket"></i></div>
+                <div class="diff-content">
+                    <h5>独自機能・サービスの提供</h5>
+                    <p>競合にない独自の機能やサービスを開発・提供します。</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function generateWinningTacticsContent() {
+    return `
+        <h4>短期施策（1-2ヶ月）</h4>
+        <ul>
+            <li>競合が弱いキーワードでのSEO強化</li>
+            <li>競合の顧客レビュー分析による改善点の特定</li>
+            <li>差別化ポイントを強調したLP作成</li>
+        </ul>
+        <h4>中期施策（3-4ヶ月）</h4>
+        <ul>
+            <li>競合比較コンテンツの制作</li>
+            <li>乗り換えキャンペーンの実施</li>
+            <li>競合ユーザー向けリターゲティング広告</li>
+        </ul>
+        <h4>長期施策（5ヶ月以降）</h4>
+        <ul>
+            <li>ブランド認知度向上キャンペーン</li>
+            <li>業界でのポジショニング確立</li>
+            <li>パートナーシップ戦略</li>
+        </ul>
+    `;
 }
 
 // グラフ描画
