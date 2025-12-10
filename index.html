@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Strategy Maker - AIマーケティング戦略自動生成</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>Marketing Strategy Maker</span>
+            </div>
+            <p class="tagline">AIが最適なマーケティング戦略を自動生成</p>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ステップインジケーター -->
+        <div class="step-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">入力</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">生成</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">結果</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">出力</div>
+            </div>
+        </div>
+
+        <!-- 入力フォームセクション -->
+        <section id="input-section" class="section card">
+            <div class="section-header">
+                <h2><i class="fas fa-edit"></i> 基本情報を入力</h2>
+                <button type="button" class="btn btn-outline btn-sm" id="sample-btn">
+                    <i class="fas fa-magic"></i> サンプルデータを入力
+                </button>
+            </div>
+            
+            <form id="strategy-form">
+                <!-- B2B/B2C選択 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-building"></i> ビジネスタイプ <span class="required">*</span>
+                    </label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="businessType" value="B2B" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">
+                                <strong>B2B</strong>
+                                <small>法人向けビジネス</small>
+                            </span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="businessType" value="B2C">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">
+                                <strong>B2C</strong>
+                                <small>個人向けビジネス</small>
+                            </span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="businessType" value="B2B2C">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">
+                                <strong>B2B2C</strong>
+                                <small>両方</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 事業内容 -->
+                <div class="form-group">
+                    <label class="form-label" for="business">
+                        <i class="fas fa-briefcase"></i> 事業内容 <span class="required">*</span>
+                    </label>
+                    <textarea id="business" name="business" rows="3" placeholder="例：クラウド型会計ソフトの開発・販売" required></textarea>
+                    <span class="char-count"><span id="business-count">0</span>/500</span>
+                </div>
+
+                <!-- 商品/サービスの説明 -->
+                <div class="form-group">
+                    <label class="form-label" for="product">
+                        <i class="fas fa-box"></i> 商品/サービスの説明 <span class="required">*</span>
+                    </label>
+                    <textarea id="product" name="product" rows="4" placeholder="例：中小企業向けに設計されたクラウド会計ソフト。自動仕訳機能、銀行連携、レポート生成機能を搭載し、経理業務を効率化します。" required></textarea>
+                    <span class="char-count"><span id="product-count">0</span>/1000</span>
+                </div>
+
+                <!-- 目標 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="goal">
+                            <i class="fas fa-bullseye"></i> 目標 <span class="required">*</span>
+                        </label>
+                        <select id="goal" name="goal" required>
+                            <option value="">選択してください</option>
+                            <option value="lead">リード獲得</option>
+                            <option value="awareness">認知度向上</option>
+                            <option value="conversion">コンバージョン率改善</option>
+                            <option value="retention">顧客維持率向上</option>
+                            <option value="revenue">売上増加</option>
+                            <option value="cpa">CPA改善</option>
+                            <option value="traffic">サイト流入増加</option>
+                            <option value="engagement">エンゲージメント向上</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="goalValue">
+                            <i class="fas fa-chart-bar"></i> 目標数値 <span class="required">*</span>
+                        </label>
+                        <input type="text" id="goalValue" name="goalValue" placeholder="例：月間50件、20%向上など" required>
+                    </div>
+                </div>
+
+                <!-- 予算・期間 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="budget">
+                            <i class="fas fa-yen-sign"></i> 予算 <span class="required">*</span>
+                        </label>
+                        <select id="budget" name="budget" required>
+                            <option value="">選択してください</option>
+                            <option value="~50万円">〜50万円/月</option>
+                            <option value="50-100万円">50〜100万円/月</option>
+                            <option value="100-300万円">100〜300万円/月</option>
+                            <option value="300-500万円">300〜500万円/月</option>
+                            <option value="500万円~">500万円以上/月</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="period">
+                            <i class="fas fa-calendar-alt"></i> 期間 <span class="required">*</span>
+                        </label>
+                        <select id="period" name="period" required>
+                            <option value="">選択してください</option>
+                            <option value="1ヶ月">1ヶ月</option>
+                            <option value="3ヶ月">3ヶ月</option>
+                            <option value="6ヶ月">6ヶ月</option>
+                            <option value="12ヶ月">12ヶ月</option>
+                            <option value="12ヶ月以上">12ヶ月以上</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ターゲット情報 -->
+                <div class="form-group">
+                    <label class="form-label" for="persona">
+                        <i class="fas fa-user-friends"></i> ターゲット情報（ペルソナ）<span class="required">*</span>
+                    </label>
+                    <textarea id="persona" name="persona" rows="4" placeholder="例：従業員10-50名の中小企業。経理担当者または経営者。業務効率化に関心が高く、ITリテラシーは中程度。年齢層は30-50代。" required></textarea>
+                    <span class="char-count"><span id="persona-count">0</span>/1000</span>
+                </div>
+
+                <!-- 追加情報（オプション） -->
+                <details class="optional-section">
+                    <summary><i class="fas fa-plus-circle"></i> 追加情報（オプション）</summary>
+                    <div class="optional-content">
+                        <div class="form-group">
+                            <label class="form-label" for="competitors">
+                                <i class="fas fa-users"></i> 競合情報
+                            </label>
+                            <textarea id="competitors" name="competitors" rows="2" placeholder="主要な競合他社や差別化ポイント"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="currentChannels">
+                                <i class="fas fa-share-alt"></i> 現在の集客チャネル
+                            </label>
+                            <textarea id="currentChannels" name="currentChannels" rows="2" placeholder="現在活用しているマーケティングチャネル"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="challenges">
+                                <i class="fas fa-exclamation-triangle"></i> 現状の課題
+                            </label>
+                            <textarea id="challenges" name="challenges" rows="2" placeholder="マーケティングにおける現在の課題"></textarea>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 送信ボタン -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+                        <i class="fas fa-rocket"></i> 戦略を生成する
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ローディングセクション -->
+        <section id="loading-section" class="section card hidden">
+            <div class="loading-container">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <h3>AIが戦略を分析中...</h3>
+                <p class="loading-message">入力情報を基に最適なマーケティング戦略を生成しています</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <p class="progress-text"><span id="progress-text">0</span>%</p>
+                <div class="loading-steps">
+                    <div class="loading-step active" id="step-analysis">
+                        <i class="fas fa-search"></i> 市場分析中
+                    </div>
+                    <div class="loading-step" id="step-strategy">
+                        <i class="fas fa-lightbulb"></i> 戦略立案中
+                    </div>
+                    <div class="loading-step" id="step-tactics">
+                        <i class="fas fa-tasks"></i> 施策設計中
+                    </div>
+                    <div class="loading-step" id="step-roadmap">
+                        <i class="fas fa-road"></i> ロードマップ作成中
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 結果セクション -->
+        <section id="result-section" class="section hidden">
+            <!-- 結果ヘッダー -->
+            <div class="result-header card">
+                <div class="result-header-content">
+                    <div>
+                        <h2><i class="fas fa-check-circle"></i> マーケティング戦略レポート</h2>
+                        <p id="result-meta">生成日: <span id="generated-date"></span></p>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-outline" id="regenerate-btn">
+                            <i class="fas fa-redo"></i> 再生成
+                        </button>
+                        <button class="btn btn-outline" id="edit-btn">
+                            <i class="fas fa-edit"></i> 入力を編集
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 戦略概要 -->
+            <div class="result-card card" id="overview-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-globe"></i> 1. マーケティング戦略の全体像</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="overview-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- KPI/KGI -->
+            <div class="result-card card" id="kpi-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-pie"></i> 2. 目的・KPI・KGI整理</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="kpi-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- 成長戦略 -->
+            <div class="result-card card" id="growth-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-seedling"></i> 3. 成長戦略（AARRR）</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="growth-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- 施策一覧 -->
+            <div class="result-card card" id="tactics-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list-check"></i> 4. 施策一覧</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="tactics-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- 詳細タスク -->
+            <div class="result-card card" id="tasks-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clipboard-list"></i> 5. 詳細タスク</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="tasks-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- 優先順位 -->
+            <div class="result-card card" id="priority-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-sort-amount-down"></i> 6. 施策の優先順位</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="priority-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- ロードマップ -->
+            <div class="result-card card" id="roadmap-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar-check"></i> 7. 月次ロードマップ</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="roadmap-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- KPI予測 -->
+            <div class="result-card card" id="forecast-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> 8. 想定KPI推移予測</h3>
+                    <button class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+                </div>
+                <div class="card-body" id="forecast-content">
+                    <!-- AIが生成したコンテンツが入る -->
+                </div>
+            </div>
+
+            <!-- エクスポートセクション -->
+            <div class="export-section card">
+                <h3><i class="fas fa-download"></i> レポートをエクスポート</h3>
+                <p>生成した戦略レポートをダウンロードできます</p>
+                <div class="export-buttons">
+                    <button class="btn btn-export" id="export-markdown-btn">
+                        <i class="fab fa-markdown"></i>
+                        <span>Markdown形式</span>
+                        <small>.md</small>
+                    </button>
+                    <button class="btn btn-export" id="export-pdf-btn">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF形式</span>
+                        <small>.pdf</small>
+                    </button>
+                    <button class="btn btn-export" id="copy-btn">
+                        <i class="fas fa-copy"></i>
+                        <span>クリップボードにコピー</span>
+                        <small>Markdown</small>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Marketing Strategy Maker. Powered by AI.</p>
+            <p class="footer-links">
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- トースト通知 -->
+    <div id="toast" class="toast hidden">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

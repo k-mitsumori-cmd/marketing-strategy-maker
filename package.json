@@ -1,0 +1,26 @@
+{
+  "name": "marketing-strategy-maker",
+  "version": "1.0.0",
+  "description": "AIを活用したマーケティング戦略自動生成ツール",
+  "main": "api/generate.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "vercel dev"
+  },
+  "keywords": [
+    "marketing",
+    "strategy",
+    "ai",
+    "openai",
+    "b2b",
+    "b2c"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^4.0.0",
+    "jspdf": "^2.5.1",
+    "html2canvas": "^1.4.1"
+  }
+}
