@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+const OpenAI = require('openai');
 
 /**
  * マーケティング戦略生成API
@@ -18,7 +18,7 @@ const GOAL_LABELS = {
     other: 'その他'
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // CORS設定
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -227,4 +227,4 @@ ${challenges ? `【現状の課題】\n${challenges}\n` : ''}
             message: error.message
         });
     }
-}
+};
